@@ -1,117 +1,105 @@
 ---
-title: "HW_Aisha_Al-Khinji"
+title: "HW1_Aisha_Al-Khinji"
+author: "Aisha Al-Khinji"
+date: "01/27/2015"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+This is my first homework 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r, echo=TRUE}
+library(ggplot2)
+```
 
+Load the iris data
 
-27 Jan 2015 04:18:05 [rsession-aalkhinj] 
-27 Jan 2015 04:18:05 [rsession-aalkhinj] 
-> This is my first homework 
-Error: unexpected symbol in "This is"
-> # This is my first homework
+```{r, echo=TRUE}
+data(iris)
+```
 
-> Library(ggplot2)
-Error: could not find function "Library"
-> library(ggplot2)
+using the variable directly
 
-# use the data frame
-> qplot(iris$Sepal.Lenght, iris$Sepal.Width)
-
-
-## Load the iris data
-> data(iris)
-> plot(iris)
-
-#load library
-> library(ggplot2)
-
-#using the variable directly
-> qplot(iris$Sepal.Lenght, iris$Sepal.Width)
-Error in exists(name, envir = env, mode = mode) : 
-  argument "env" is missing, with no default
+```{r, echo=TRUE}
+qplot(iris$Sepal.Length, iris$Sepal.Width)
+```
   
-#use the dataframe
-> qplot(Sepal.Length, Sepal.Width, data=iris)
+use the dataframe
 
-> head(iris)
-  Sepal.Length Sepal.Width Petal.Length Petal.Width Species
-1          5.1         3.5          1.4         0.2  setosa
-2          4.9         3.0          1.4         0.2  setosa
-3          4.7         3.2          1.3         0.2  setosa
-4          4.6         3.1          1.5         0.2  setosa
-5          5.0         3.6          1.4         0.2  setosa
-6          5.4         3.9          1.7         0.4  setosa
+```{r, echo=TRUE}
+qplot(Sepal.Length, Sepal.Width, data=iris)
+```
 
-#Load the library
-> library(reshape2)
+```{r, echo=TRUE}
+head(iris)
+```
 
-# reshape2-melt
-# add a columen to keep track of the flower
+Load the library
 
-> iris$flower_id <- rownames(iris)
+```{r, echo=TRUE}
+library(reshape2)
+```
 
-#Defalult options
-> iris_melted <- melt(iris)
+reshape2-melt
+
+add a columen to keep track of the flower
+
+
+```{r, echo=TRUE}
+iris$flower_id <- rownames(iris)
+```
+
+Defalult options
+
+```{r, echo=TRUE}
+iris_melted <- melt(iris)
+```
+
 Using Species, flower_id as id variables
-> head(iris_melted)
-  Species flower_id     variable value
-1  setosa         1 Sepal.Length   5.1
-2  setosa         2 Sepal.Length   4.9
-3  setosa         3 Sepal.Length   4.7
-4  setosa         4 Sepal.Length   4.6
-5  setosa         5 Sepal.Length   5.0
-6  setosa         6 Sepal.Length   5.4
 
-#split the variable to get the columns as we need
-> split_variable <- strsplit(as.character(iris_melted$variable),split="\\.")
+```{r, echo=TRUE}
+head(iris_melted)
+```
 
-# creat two new variables 
-> iris_metlted$flower_part <- sapply(split_variable, "[",1)
-Error in iris_metlted$flower_part <- sapply(split_variable, "[", 1) : 
-  object 'iris_metlted' not found
-> iris_melted$flower_part <- sapply(split_variable, "[",1)
-> iris_melted$measurement_type <- sapply(split_variable,"[",2)
+split the variable to get the columns as we need
 
-#remove one of the variable that we don't need
-> iris_melted$variable <- NULL
-> head(iris_melted)
-  Species flower_id value flower_part measurement_type
-1  setosa         1   5.1       Sepal           Length
-2  setosa         2   4.9       Sepal           Length
-3  setosa         3   4.7       Sepal           Length
-4  setosa         4   4.6       Sepal           Length
-5  setosa         5   5.0       Sepal           Length
-6  setosa         6   5.4       Sepal           Length
+```{r, echo=TRUE}
+split_variable <- strsplit(as.character(iris_melted$variable),split="\\.")
+```
 
-#reshape2-cast
-#use cast to frame the data 
-> iris_cast <- dcast(iris_melted, formula=flower_id+Species+flower_part~measurement_type)
-> head(iris_cast)
-  flower_id    Species flower_part Length Width
-1         1     setosa       Petal    1.4   0.2
-2         1     setosa       Sepal    5.1   3.5
-3        10     setosa       Petal    1.5   0.1
-4        10     setosa       Sepal    4.9   3.1
-5       100 versicolor       Petal    4.1   1.3
-6       100 versicolor       Sepal    5.7   2.8
+creat two new variables 
 
-#facet by species and Petal/Sepal
-> qplot(x=Width, y=Length, data=iris_cast, geom=c("point", "smooth"), color=Species, method="lm" facets=flower_part`Species)
-Error: unexpected symbol in "qplot(x=Width, y=Length, data=iris_cast, geom=c("point", "smooth"), color=Species, method="lm" facets"
-> qplot (x=Width, y=Length, data=iris_cast, geom=c("point", "smooth"), color=Species, method="lm" facets=flower_part`Species)
-Error: unexpected symbol in "qplot (x=Width, y=Length, data=iris_cast, geom=c("point", "smooth"), color=Species, method="lm" facets"
-> qplot()
-Error in exists(name, envir = env, mode = mode) : 
-  argument "env" is missing, with no default
-  
-  #
-> library(ggplot2)
+```{r, echo=TRUE}
+iris_melted$flower_part <- sapply(split_variable,"[",1)
+iris_melted$measurement_type <- sapply(split_variable,"[",2)
+```
 
-#facet by flower part by using Species and aesthetic variable and using facet_wrap
-> ggplot(data=iris_cast, aes(x=Width, y=Length, color=Species))+geom_point()+facet_wrap(Species~flower_part, scale="free")+geom_smooth(method="lm")+theme_bw(base_size=30)
-> ggplot(data=iris_cast, aes(x=Width, y=Length, color=Species))+geom_point()+facet_wrap(Species~flower_part, scale="free")+geom_smooth(method="lm")+theme_bw(base_size=10)
-> 
+remove one of the variable that we don't need
+
+```{r, echo=TRUE}
+head(iris_melted)
+```
+
+reshape2-cast
+
+use cast to frame the data 
+
+```{r, echo=TRUE}
+iris_cast <- dcast(iris_melted, formula=flower_id+Species+flower_part~measurement_type)
+```
+
+```{r, echo=TRUE}
+head(iris_cast)
+```
+
+facet by species and Petal/Sepal
+
+```{r, echo=TRUE}
+qplot (x=Width, y=Length, data=iris_cast, geom=c("point", "smooth"), color=Species, method="lm", facets=flower_part~Species)
+```
+
+facet by flower part by using Species and aesthetic variable and using facet_wrap
+
+```{r, echo=TRUE}
+ggplot(data=iris_cast, aes(x=Width, y=Length))+geom_point()+facet_grid(Species~flower_part, scale="free")+geom_smooth(method="lm")+theme_bw(base_size=10)
+```
+
